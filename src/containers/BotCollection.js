@@ -5,7 +5,7 @@ class BotCollection extends React.Component {
 
   displayBots = () => {
     return this.props.bots.map(bot => {
-      return <BotCard key={bot.id} bot={bot} addToMyBots={this.props.addToMyBots}/>
+      return <BotCard key={bot.id} bot={bot} handleBotClick={this.props.handleBotClick}/>
     })
   }
 

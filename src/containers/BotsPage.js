@@ -25,11 +25,17 @@ class BotsPage extends React.Component {
     }
   }
 
+  removeFromMyBots = botObj => {
+    const myBots = this.state.myBots.filter(bot => bot.id !== botObj.id)
+    this.setState({ myBots })
+  }
+
+
   render() {
     return (
       <div>
-        <YourBotArmy myBots={this.state.myBots} />
-        <BotCollection addToMyBots={this.addToMyBots} bots={this.state.bots} />
+        <YourBotArmy myBots={this.state.myBots} handleBotClick={this.removeFromMyBots} />
+        <BotCollection handleBotClick={this.addToMyBots} bots={this.state.bots} />
       </div>
     );
   }
