@@ -2,6 +2,7 @@ import React from "react";
 import BotCollection from './BotCollection'
 import YourBotArmy from './YourBotArmy'
 import BotSpecs from './../components/BotSpecs'
+import Search from '../components/Search';
 
 const botAPI = 'https://bot-battler-api.herokuapp.com/api/v1/bots'
 
@@ -10,7 +11,8 @@ class BotsPage extends React.Component {
     bots: [],
     army: [],
     clicked: false,
-    foundBot: {}
+    foundBot: {},
+    searchTerm: ''
   }
 
   componentDidMount() {
@@ -30,7 +32,8 @@ class BotsPage extends React.Component {
     const foundBot = this.state.bots.find(bot => bot.id === id)
     if (this.isNotIncluded(id)) {
       this.setState({
-        army: [...this.state.army, foundBot]
+        army: [...this.state.army, foundBot],
+        clicked: !this.state.clicked
       }, () => console.log(this.state.army))
     }
   }
@@ -53,28 +56,30 @@ class BotsPage extends React.Component {
 
   displaySettings = () => {
     if (this.state.clicked === false) {
-      return <BotCollection handleClick={this.handleClick} bots={this.state.bots}/>
+      return <BotCollection handleClick={this.handleClick} bots={this.filteredBots()}/>
     } else {
       return <BotSpecs goBack={this.handleClick} enlistClick={this.handleAddClick} bot={this.state.foundBot} />
     }
   }
 
- // displaySettings = (event) => {
- //   if (event.target.value === 'Go Back') {
- //     console.log('Go Back');
- //   } else if (event.target.value === 'Enlist') {
- //     console.log('Enlist clicked');
- //   }
- //   else {
- //     console.log('image clicked for' );
- //   }
- // }
+  handleChange = (event) => {
+    console.log(event.target.value)
+    this.setState({
+      searchTerm: event.target.value
+    })
+  }
+
+  filteredBots = () => {
+    return this.state.bots.filter(bot =>
+      bot.name.toLowerCase().includes(this.state.searchTerm.toLowerCase()))
+  }
 
 
   render() {
     return (
       <div>
         <YourBotArmy handleClick={this.handleRemovalClick} army={this.state.army} />
+        <Search handleChange={this.handleChange} searchTerm={this.state.searchTerm}/>
         {this.displaySettings()}
       </div>
     );
